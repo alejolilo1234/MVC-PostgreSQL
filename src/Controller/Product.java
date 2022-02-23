@@ -28,6 +28,7 @@ public class Product implements ActionListener {
         this.vProduct.setSize(500, 300);
         this.vProduct.setLocationRelativeTo(null);
         this.vProduct.add(this.vProduct.panel);
+        this.vProduct.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.vProduct.setVisible(false);
     }
 

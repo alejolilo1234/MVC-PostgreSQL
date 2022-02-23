@@ -17,7 +17,7 @@ public class ProductDB extends Model.Connection {
             ps.setInt(4, _product.getQuantity());
             ps.execute();
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
             return false;
         } finally {
