@@ -1,5 +1,6 @@
 package Model;
 
+import javax.swing.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -12,7 +13,7 @@ public class Connection {
 
     public java.sql.Connection getConnection() {
         try {
-            con = DriverManager.getConnection(this.url, this.user, this.password);
+            con = DriverManager.getConnection(this.url, this.user, JOptionPane.showInputDialog("Contraseña de base de datos: "));
         } catch(SQLException e) {
             System.err.println(e.getMessage());
         }

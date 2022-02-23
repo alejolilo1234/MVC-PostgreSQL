@@ -4,20 +4,13 @@ public class Product {
     private int id;
     private String code;
     private String name;
-    /*private double price;
-    private double quantity;*/
+    private Double price;
+    private Integer quantity;
 
     public Product() {
         //
     }
 
-    public Product(int id, String code, String name, double price, int quantity) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        /*this.price = price;
-        this.quantity = quantity;*/
-    }
 
     public int getId() {
         return id;
@@ -43,19 +36,19 @@ public class Product {
         this.name = name;
     }
 
-    /*public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public double getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(double quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
-    }*/
+    }
 }

@@ -23,21 +23,21 @@ public class Product implements ActionListener {
     }
 
     public void start() {
-        vProduct.setResizable(false);
-        vProduct.setTitle("Productos");
-        vProduct.setLocationRelativeTo(null);
-        vProduct.setSize(500, 300);
-        vProduct.add(vProduct.panel);
-        vProduct.setVisible(false);
+        this.vProduct.setResizable(false);
+        this.vProduct.setTitle("Productos");
+        this.vProduct.setSize(500, 300);
+        this.vProduct.setLocationRelativeTo(null);
+        this.vProduct.add(this.vProduct.panel);
+        this.vProduct.setVisible(false);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == vProduct.btnSave) {
-            mProduct.setCode(vProduct.txtCode.getText());
-            mProduct.setName(vProduct.txtName.getText());
-            /*mProduct.setPrice(Double.parseDouble(vProduct.txtPrice.getText()));
-            mProduct.setQuantity(Double.parseDouble(vProduct.txtCode.getText()));*/
+            mProduct.setCode(this.vProduct.txtCode.getText());
+            mProduct.setName(this.vProduct.txtName.getText());
+            mProduct.setPrice(Double.parseDouble(this.vProduct.txtPrice.getText()));
+            mProduct.setQuantity(Integer.parseInt(this.vProduct.txtQuantity.getText()));
 
             if (mPDB.save(mProduct)) {
                 JOptionPane.showMessageDialog(null, "Exito!!");
@@ -52,7 +52,7 @@ public class Product implements ActionListener {
     public void clear() {
         this.vProduct.txtCode.setText(null);
         this.vProduct.txtName.setText(null);
-        /*this.vProduct.btnClear.setText(null);
-        this.vProduct.btnSearch.setText(null);*/
+        this.vProduct.txtPrice.setText(null);
+        this.vProduct.txtQuantity.setText(null);
     }
 }
