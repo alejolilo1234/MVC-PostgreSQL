@@ -2,7 +2,7 @@ package View;
 
 import javax.swing.*;
 
-public class Product extends JFrame{
+public class Product extends JFrame {
     public JTextField txtCode;
     public JTextField txtName;
     public JTextField txtPrice;
@@ -18,7 +18,6 @@ public class Product extends JFrame{
     public Product() {
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             SwingUtilities.updateComponentTreeUI(this);
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();

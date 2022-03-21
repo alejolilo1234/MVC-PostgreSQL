@@ -2,12 +2,12 @@ package Main;
 
 public class Main {
     public static void main(String ...args) {
-        Model.Product mProduct = new Model.Product();
-        Model.ProductDB pDB = new Model.ProductDB();
-        View.Product vProduct = new View.Product();
+        Model.Login mLogin = new Model.Login();
+        Model.LoginDB pLB = new Model.LoginDB();
+        View.Login vLogin = new View.Login();
 
-        Controller.Product cProduct = new Controller.Product(mProduct, pDB, vProduct);
+        Controller.Login cProduct = new Controller.Login(mLogin, pLB, vLogin);
         cProduct.start();
-        vProduct.setVisible(true);
+        vLogin.setVisible(true);
     }
 }

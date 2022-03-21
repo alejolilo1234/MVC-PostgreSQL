@@ -148,7 +148,11 @@
                 <preferred-size width="1" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <editable value="true"/>
+              <enabled value="true"/>
+              <visible value="false"/>
+            </properties>
             <clientProperties>
               <html.disable class="java.lang.Boolean" value="false"/>
             </clientProperties>
