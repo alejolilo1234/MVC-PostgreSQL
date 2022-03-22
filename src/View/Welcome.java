@@ -4,14 +4,39 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class Welcome extends JFrame {
-    public JLabel txt;
+    // Main Frame
+    public JLabel txtTitle;
     public JPanel panel;
     public JTabbedPane tabbedPane1;
-    public JPanel Materia;
+    // Supplier
+    public JTable table3;
+    public JTextField textField3;
+    public JButton guardarButton;
+    public JButton eliminarButton;
+    public JButton agregarButton;
+    public JButton limpiarButton;
+    public JComboBox textField4;
+    public JTextField textField5;
+    public JTextArea textArea2;
+    // Supplies
+    public JSpinner priceSpinner;
+    public JSpinner quantitySpinner;
+    public JSpinner totalSpinner;
+    public JComboBox productsList;
+    public JComboBox supplierList;
+    public JComboBox suppliesList;
+    public JTextArea textArea1;
+    public JTable table2;
+    public JButton button1;
+    public JButton button2;
+    public JButton button3;
+    public JButton button4;
+    // Products
+    public JPanel products;
     public JTable table1;
-    public JPanel Productos;
-    private JButton eliminarButton;
-    private JButton guardarButton;
+    public JButton btnDelete;
+    public JButton btnSave;
+    // Privates
 
     public Welcome() {
         try {
@@ -20,5 +45,13 @@ public class Welcome extends JFrame {
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+    }
+
+    public void error() {
+        JOptionPane.showMessageDialog(null, "Hubo un error, por favor intentalo de nuevo. Revisa que ningún campo este vacío o con un dato incorrecto.");
+    }
+
+    public void exito() {
+        JOptionPane.showMessageDialog(null, "Datos insertados correctamente!");
     }
 }

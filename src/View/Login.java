@@ -28,4 +28,8 @@ public class Login extends JFrame {
             e.printStackTrace();
         }
     }
+
+    public void error() {
+        JOptionPane.showMessageDialog(null, "Error al ingresar. Revisa tu usuario o contraseña.");
+    }
 }

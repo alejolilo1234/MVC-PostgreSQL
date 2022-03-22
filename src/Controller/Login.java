@@ -37,6 +37,8 @@ public class Login implements ActionListener {
         this.vLogin.add(this.vLogin.panel);
         this.vLogin.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.vLogin.setVisible(false);
+        this.vLogin.txtUsername.setText("jhon");
+        this.vLogin.txtPassword.setText("123");
     }
 
     @Override
@@ -46,16 +48,15 @@ public class Login implements ActionListener {
             mLogin.setPassword(Integer.parseInt(String.valueOf(this.vLogin.txtPassword.getPassword())));
 
             if (mLDB.login(mLogin)) {
-                JOptionPane.showMessageDialog(null, "¡Bienvenid@!");
+                View.Welcome vWelcome = new View.Welcome();
+                Model.WelcomeDB mWelcomeDB = new Model.WelcomeDB();
 
-                View.Welcome vWelcome= new View.Welcome();
-
-                Controller.Welcome cWelcome = new Controller.Welcome(vWelcome);
+                Controller.Welcome cWelcome = new Controller.Welcome(vWelcome, mWelcomeDB);
                 cWelcome.start();
                 this.vLogin.setVisible(false);
                 vWelcome.setVisible(true);
             } else {
-                JOptionPane.showMessageDialog(null, "Error al ingresar. Revisa tu usuario o contraseña.");
+                this.vLogin.error();
             }
         } else if(e.getSource() == vLogin.btnOne) this.vLogin.txtPassword.setText(String.valueOf(this.vLogin.txtPassword.getPassword()) + "1");
         else if(e.getSource() == vLogin.btnTwo) this.vLogin.txtPassword.setText(String.valueOf(this.vLogin.txtPassword.getPassword()) + "2");
