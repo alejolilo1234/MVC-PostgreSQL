@@ -3,15 +3,18 @@ package Controller;
 import Model.Supplier;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Welcome implements ActionListener, MouseListener {
+public class Welcome implements ActionListener, MouseListener, ChangeListener {
     public View.Welcome vWelcome = null;
     public Model.WelcomeDB mWelcomeDB = null;
     DefaultTableModel model = null;
@@ -36,11 +39,15 @@ public class Welcome implements ActionListener, MouseListener {
         this.vWelcome.agregarButton.addActionListener(this);
         this.vWelcome.limpiarButton.addActionListener(this);
         this.vWelcome.guardarButton.addActionListener(this);
+        this.vWelcome.eliminarButton.addActionListener(this);
         this.vWelcome.table3.addMouseListener(this);
         // Product
         this.vWelcome.btnSave.addActionListener(this);
         // Supplies
         this.vWelcome.productsList.addActionListener(this);
+        this.vWelcome.supplierList.addActionListener(this);
+        this.vWelcome.suppliesList.addActionListener(this);
+        this.vWelcome.quantitySpinner.addChangeListener(this);
 
         this.supplier();
         this.products();
@@ -87,29 +94,59 @@ public class Welcome implements ActionListener, MouseListener {
     public void actionPerformed(ActionEvent e) {
         // Products
         if(e.getSource() == this.vWelcome.btnSave) {
-            int select = this.vWelcome.table1.getSelectedRow();
-            System.out.println(model2.getValueAt(select, 0).toString());
-            System.out.println(model2.getValueAt(select, 1).toString());
-            System.out.println(model2.getValueAt(select, 2).toString());
-            System.out.println(model2.getValueAt(select, 3).toString());
-            System.out.println(model2.getValueAt(select, 4).toString());
+            System.out.println("Guardar");
         }
         if(e.getSource() == this.vWelcome.productsList) {
             String selected = (String) vWelcome.productsList.getSelectedItem();
             switch (selected) {
                 case "Seleccione":
-                    this.vWelcome.suppliesList.removeAllItems();
-                    this.vWelcome.supplierList.removeAllItems();
+                    this.resetSuppliesTab();
                 break;
                 case "Papas rellenas":
+                    this.resetSuppliesTab();
                     for(String pl: Model.Transform.stringToList(mWelcomeDB.selectSupply("Papas rellenas")))
                         this.vWelcome.suppliesList.addItem(pl.trim());
                 break;
-                default:
-                    System.out.println("Error");
-                    this.vWelcome.suppliesList.removeAllItems();
-                    this.vWelcome.supplierList.removeAllItems();
+                case "Empanadas":
+                    this.resetSuppliesTab();
+                    for(String pl: Model.Transform.stringToList(mWelcomeDB.selectSupply("Empanadas")))
+                        this.vWelcome.suppliesList.addItem(pl.trim());
                 break;
+                case "Pasteles de carne":
+                    this.resetSuppliesTab();
+                    for(String pl: Model.Transform.stringToList(mWelcomeDB.selectSupply("Pasteles de carne")))
+                        this.vWelcome.suppliesList.addItem(pl.trim());
+                break;
+                case "Pasteles de pollo":
+                    this.resetSuppliesTab();
+                    for(String pl: Model.Transform.stringToList(mWelcomeDB.selectSupply("Pasteles de pollo")))
+                        this.vWelcome.suppliesList.addItem(pl.trim());
+                break;
+                case "Churros/Dedos":
+                    this.resetSuppliesTab();
+                    for(String pl: Model.Transform.stringToList(mWelcomeDB.selectSupply("Churros/Dedos")))
+                        this.vWelcome.suppliesList.addItem(pl.trim());
+                break;
+                case "Hojaldras":
+                    this.resetSuppliesTab();
+                    for(String pl: Model.Transform.stringToList(mWelcomeDB.selectSupply("Hojaldras")))
+                        this.vWelcome.suppliesList.addItem(pl.trim());
+                break;
+                default:
+                    this.vWelcome.error();
+                break;
+            }
+        }
+        if(e.getSource() == this.vWelcome.supplierList) {
+            double price = (int) this.mWelcomeDB.getPriceSupplier((String) this.vWelcome.supplierList.getSelectedItem());
+            this.vWelcome.priceSpinner.setValue(price);
+        }
+        if(e.getSource() == this.vWelcome.suppliesList) {
+            this.vWelcome.supplierList.removeAllItems();
+            this.vWelcome.quantitySpinner.setValue(0);
+            this.vWelcome.totalSpinner.setValue(0);
+            for(Model.Supplier i: this.mWelcomeDB.getSupplier((String) this.vWelcome.suppliesList.getSelectedItem())) {
+                this.vWelcome.supplierList.addItem(i.getName());
             }
         }
         // Supplier
@@ -133,7 +170,6 @@ public class Welcome implements ActionListener, MouseListener {
                     this.clear();
                 } else this.vWelcome.error();
             }
-
         }
         if(e.getSource() == this.vWelcome.limpiarButton) {
             this.clear();
@@ -144,12 +180,24 @@ public class Welcome implements ActionListener, MouseListener {
                 int select2 = this.vWelcome.table3.getSelectedRow();
                 newSupplier.setName(model.getValueAt(select2, 0).toString());
                 newSupplier.setSupply(model.getValueAt(select2, 1).toString());
-                newSupplier.setPrice(Double.parseDouble(model.getValueAt(select2, 2).toString()));
+                try {
+                    newSupplier.setPrice(Double.parseDouble(model.getValueAt(select2, 2).toString()));
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                    this.vWelcome.error();
+                }
                 newSupplier.setDescription(model.getValueAt(select2, 3).toString());
                 if(this.mWelcomeDB.updateSupplier(selectedSupplier, newSupplier)) {
                     this.vWelcome.exito();
                 } else this.vWelcome.error();
             }
+        }
+        if(e.getSource() == this.vWelcome.eliminarButton) {
+            model = (DefaultTableModel) this.vWelcome.table3.getModel();
+            if(this.mWelcomeDB.deleteSupplier(selectedSupplier)) {
+                this.vWelcome.exito();
+            } else this.vWelcome.error();
+            model.removeRow(selectRowTableSupplier);
         }
     }
 
@@ -168,6 +216,14 @@ public class Welcome implements ActionListener, MouseListener {
         this.vWelcome.textField4.setSelectedIndex(0);
         this.vWelcome.textField5.setText(null);
         this.vWelcome.textArea2.setText(null);
+    }
+
+    public void resetSuppliesTab() {
+        this.vWelcome.suppliesList.removeAllItems();
+        this.vWelcome.supplierList.removeAllItems();
+        this.vWelcome.priceSpinner.setValue(0.0);
+        this.vWelcome.quantitySpinner.setValue(0);
+        this.vWelcome.totalSpinner.setValue(0);
     }
 
     @Override
@@ -213,5 +269,14 @@ public class Welcome implements ActionListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        if(e.getSource() == this.vWelcome.quantitySpinner) {
+            double one = (double) this.vWelcome.priceSpinner.getValue();
+            int two = (int) this.vWelcome.quantitySpinner.getValue();
+            this.vWelcome.totalSpinner.setValue((int) one * two);
+        }
     }
 }

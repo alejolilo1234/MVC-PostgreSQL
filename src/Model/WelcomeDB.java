@@ -127,6 +127,70 @@ public class WelcomeDB extends Model.Connection {
         }
     }
 
+    public List <Model.Supplier> getSupplier(String _query) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        java.sql.Connection con = (java.sql.Connection) this.getConnection();
+
+        String sql = "SELECT * FROM supplier WHERE supply = ?;";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, _query);
+            rs = ps.executeQuery();
+
+            List <Model.Supplier> list = new ArrayList<>();
+
+            while(rs.next()) {
+                Model.Supplier sup = new Model.Supplier();
+                sup.setName(rs.getString("name"));
+                sup.setSupply(rs.getString("supply"));
+                sup.setPrice(rs.getDouble("price"));
+                sup.setDescription(rs.getString("description"));
+                list.add(sup);
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return null;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public double getPriceSupplier(String _query) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        java.sql.Connection con = (java.sql.Connection) this.getConnection();
+
+        String sql = "SELECT price FROM supplier WHERE name = ?;";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, _query);
+            rs = ps.executeQuery();
+
+            if(rs.next()) {
+                double price = rs.getDouble("price");
+                return price;
+            }
+            return 0.0;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return 0.0;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
     public boolean insertSupplier(Model.Supplier _sup) {
         PreparedStatement ps = null;
         java.sql.Connection con = (java.sql.Connection) this.getConnection();
@@ -166,6 +230,29 @@ public class WelcomeDB extends Model.Connection {
             ps.setDouble(3, _newSupplier.getPrice());
             ps.setString(4, _newSupplier.getDescription());
             ps.setString(5, _actualSupplier.getName());
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public boolean deleteSupplier(Model.Supplier _actualSupplier) {
+        PreparedStatement ps = null;
+        java.sql.Connection con = (java.sql.Connection) this.getConnection();
+
+        String sql = "DELETE FROM supplier WHERE name = ?;";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, _actualSupplier.getName());
             ps.execute();
             return true;
         } catch (SQLException e) {

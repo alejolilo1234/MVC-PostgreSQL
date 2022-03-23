@@ -331,20 +331,20 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="f64e9" class="javax.swing.JButton" binding="button1" default-binding="true">
+                      <component id="f64e9" class="javax.swing.JButton" binding="agregarButton1" default-binding="true">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Button"/>
+                          <text value="Agregar"/>
                         </properties>
                       </component>
-                      <component id="2b53d" class="javax.swing.JButton" binding="button2" default-binding="true">
+                      <component id="2b53d" class="javax.swing.JButton" binding="limpiarButton1" default-binding="true">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Button"/>
+                          <text value="Limpiar"/>
                         </properties>
                       </component>
                     </children>
@@ -380,20 +380,20 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="49314" class="javax.swing.JButton" binding="button3" default-binding="true">
+                      <component id="49314" class="javax.swing.JButton" binding="guardarButton1" default-binding="true">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Button"/>
+                          <text value="Guardar"/>
                         </properties>
                       </component>
-                      <component id="3ecf2" class="javax.swing.JButton" binding="button4" default-binding="true">
+                      <component id="3ecf2" class="javax.swing.JButton" binding="eliminarButton1" default-binding="true">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
-                          <text value="Button"/>
+                          <text value="Eliminar"/>
                         </properties>
                       </component>
                     </children>

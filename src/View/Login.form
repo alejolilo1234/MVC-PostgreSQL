@@ -23,7 +23,7 @@
           </grid>
         </constraints>
         <properties>
-          <focusable value="false"/>
+          <focusable value="true"/>
         </properties>
       </component>
       <component id="5a8a5" class="javax.swing.JPasswordField" binding="txtPassword">

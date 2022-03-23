@@ -27,10 +27,10 @@ public class Welcome extends JFrame {
     public JComboBox suppliesList;
     public JTextArea textArea1;
     public JTable table2;
-    public JButton button1;
-    public JButton button2;
-    public JButton button3;
-    public JButton button4;
+    public JButton agregarButton1;
+    public JButton limpiarButton1;
+    public JButton guardarButton1;
+    public JButton eliminarButton1;
     // Products
     public JPanel products;
     public JTable table1;
@@ -48,7 +48,7 @@ public class Welcome extends JFrame {
     }
 
     public void error() {
-        JOptionPane.showMessageDialog(null, "Hubo un error, por favor intentalo de nuevo. Revisa que ningún campo este vacío o con un dato incorrecto.");
+        JOptionPane.showMessageDialog(null, "Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
     }
 
     public void exito() {
