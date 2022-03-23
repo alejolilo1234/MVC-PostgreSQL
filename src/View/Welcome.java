@@ -36,6 +36,7 @@ public class Welcome extends JFrame {
     public JTable table1;
     public JButton btnDelete;
     public JButton btnSave;
+    public JComboBox comboBox1;
     // Privates
 
     public Welcome() {

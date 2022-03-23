@@ -1,5 +1,6 @@
 package Controller;
 
+import Model.AvailableSupply;
 import Model.Supplier;
 
 import javax.swing.*;
@@ -19,8 +20,11 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
     public Model.WelcomeDB mWelcomeDB = null;
     DefaultTableModel model = null;
     DefaultTableModel model2 = null;
+    DefaultTableModel modelTableSupplies = null;
     Model.Supplier selectedSupplier = null;
+    Model.AvailableSupply selectedAvailableSupply = null;
     int selectRowTableSupplier;
+    int selectRowTableSupplies;
 
     public Welcome(View.Welcome _view, Model.WelcomeDB _model) {
         this.vWelcome = _view;
@@ -30,7 +34,7 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
     public void start() {
         this.vWelcome.setResizable(false);
         this.vWelcome.setTitle("Panel principal");
-        this.vWelcome.setSize(800, 400);
+        this.vWelcome.setSize(1000, 500);
         this.vWelcome.setLocationRelativeTo(null);
         this.vWelcome.add(this.vWelcome.panel);
         this.vWelcome.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,11 +52,18 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
         this.vWelcome.supplierList.addActionListener(this);
         this.vWelcome.suppliesList.addActionListener(this);
         this.vWelcome.quantitySpinner.addChangeListener(this);
+        // Available Supplies
+        this.vWelcome.agregarButton1.addActionListener(this);
+        this.vWelcome.limpiarButton1.addActionListener(this);
+        this.vWelcome.guardarButton1.addActionListener(this);
+        this.vWelcome.eliminarButton1.addActionListener(this);
+        this.vWelcome.table2.addMouseListener(this);
 
         this.supplier();
         this.products();
         this.supplies();
         this.newSupplier();
+        this.newAvailableSupplier();
     }
 
     // Supplier
@@ -73,28 +84,105 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
 
     // Supplies
     public void supplies() {
+        String[] tableHeader = { "Producto", "Materia prima", "Proveedor", "Precio Actual", "Cantidad", "Notas", "Total"};
+        modelTableSupplies = new DefaultTableModel(tableHeader, 0);
+        this.vWelcome.table2.setModel(modelTableSupplies);
+
+        for(Model.AvailableSupply sup: mWelcomeDB.getAvailableSupplies()) {
+            String[] item = { sup.getProduct(), sup.getSupply(), sup.getSupplier(), String.valueOf(sup.getPriceToday()), String.valueOf(sup.getQuantity()), sup.getDescription(), String.valueOf(sup.getTotal()) };
+            modelTableSupplies.addRow(item);
+        }
+
         this.vWelcome.productsList.addItem("Seleccione");
-        for(String pl: Model.Transform.stringToList(mWelcomeDB.readProducts()))
+        for(String pl: Model.Transform.stringToList(this.mWelcomeDB.readProducts()))
             this.vWelcome.productsList.addItem(pl.trim());
     }
 
     // Products
     public void products() {
-        String[] tableHeader = { "Nombre", "Cantidad", "Precio", "Total", "Proveedor" };
+        String[] tableHeader = { "Nombre", "Cantidad" };
         model2 = new DefaultTableModel(tableHeader, 0);
         this.vWelcome.table1.setModel(model2);
 
-        String[] items = { "Nombre1", "Cantidad1", "Precio1", "Total1", "Proveedor1" };
-        String[] items2 = { "Nombre2", "Cantidad2", "Precio2", "Total2", "Proveedor2" };
-        model2.addRow(items);
-        model2.addRow(items2);
+        for(Model.ProductsReady sup: this.mWelcomeDB.getProductsReady()) {
+            String[] item = { sup.getName(), String.valueOf(sup.getQuantity()) };
+            model2.addRow(item);
+        }
+
+        this.vWelcome.comboBox1.addItem("Seleccione");
+        for(String pl: Model.Transform.stringToList(this.mWelcomeDB.readProducts()))
+            this.vWelcome.comboBox1.addItem(pl.trim());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         // Products
         if(e.getSource() == this.vWelcome.btnSave) {
-            System.out.println("Guardar");
+            List<Model.AvailableSupply> list = mWelcomeDB.createProduct((String) this.vWelcome.comboBox1.getSelectedItem());
+
+            List<Boolean> harina = new ArrayList<Boolean>();
+            List<Boolean> carne = new ArrayList<Boolean>();
+            List<Boolean> papa = new ArrayList<Boolean>();
+            List<Boolean> aceite = new ArrayList<Boolean>();
+            List<Boolean> pollo = new ArrayList<Boolean>();
+            List<Boolean> queso = new ArrayList<Boolean>();
+
+            if(!list.isEmpty()) {
+                for(Model.AvailableSupply i: list) {
+                    switch(i.getSupply()){
+                        case "Harina":
+                            harina.add(true);
+                        break;
+                        case "Carne":
+                            carne.add(true);
+                        break;
+                        case "Papa":
+                            papa.add(true);
+                            break;
+                        case "Aceite":
+                            aceite.add(true);
+                            break;
+                        case "Pollo":
+                            pollo.add(true);
+                            break;
+                        case "Queso":
+                            queso.add(true);
+                            break;
+                        default:
+                            System.out.println("Error");
+                        break;
+                    }
+                }
+                switch((String) this.vWelcome.comboBox1.getSelectedItem()) {
+                    case "Papas rellenas":
+                        if(!harina.isEmpty() && !carne.isEmpty() && !papa.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
+                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                    break;
+                    case "Pasteles de carne":
+                        if(!harina.isEmpty() && !carne.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
+                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                    break;
+                    case "Pasteles de pollo":
+                        if(!harina.isEmpty() && !pollo.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
+                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                    break;
+                    case "Churros/Dedos":
+                        if(!harina.isEmpty() && !queso.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
+                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                    break;
+                    case "Hojaldras":
+                        if(!harina.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
+                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                    break;
+                    case "Empanadas":
+                        if(!harina.isEmpty() && !papa.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
+                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                    break;
+                    default:
+                        System.out.println("Error");
+                    break;
+                }
+            } else System.out.println("No existen materias primas para este producto.");
         }
         if(e.getSource() == this.vWelcome.productsList) {
             String selected = (String) vWelcome.productsList.getSelectedItem();
@@ -169,7 +257,7 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                     model.addRow(item);
                     this.clear();
                 } else this.vWelcome.error();
-            }
+            } else this.vWelcome.error();
         }
         if(e.getSource() == this.vWelcome.limpiarButton) {
             this.clear();
@@ -196,14 +284,83 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
             model = (DefaultTableModel) this.vWelcome.table3.getModel();
             if(this.mWelcomeDB.deleteSupplier(selectedSupplier)) {
                 this.vWelcome.exito();
+                model.removeRow(selectRowTableSupplier);
             } else this.vWelcome.error();
-            model.removeRow(selectRowTableSupplier);
+        }
+        // AvailableSupplies
+        if(e.getSource() == this.vWelcome.agregarButton1) {
+            Model.AvailableSupply supplier = new Model.AvailableSupply();
+            supplier.setProduct((String) this.vWelcome.productsList.getSelectedItem());
+            supplier.setSupply((String) this.vWelcome.suppliesList.getSelectedItem());
+            supplier.setSupplier((String) this.vWelcome.supplierList.getSelectedItem());
+            supplier.setPriceToday((double) this.vWelcome.priceSpinner.getValue());
+            supplier.setQuantity((int) this.vWelcome.quantitySpinner.getValue());
+            supplier.setDescription(this.vWelcome.textArea1.getText());
+            supplier.setTotal((int) this.vWelcome.totalSpinner.getValue());
+
+            if(
+                    this.error2((String) this.vWelcome.productsList.getSelectedItem()) &&
+                    this.error2((String) this.vWelcome.suppliesList.getSelectedItem()) &&
+                    this.error2((String) this.vWelcome.supplierList.getSelectedItem()) &&
+                    this.error2(String.valueOf(this.vWelcome.quantitySpinner.getValue())) &&
+                    this.error2(this.vWelcome.textArea1.getText())
+            ) {
+                if(this.mWelcomeDB.insertAvailableSupply(supplier)){
+                    this.vWelcome.exito();
+                    modelTableSupplies = (DefaultTableModel) this.vWelcome.table2.getModel();
+                    String[] item = { supplier.getProduct(), supplier.getSupply(), supplier.getSupplier(), String.valueOf(supplier.getPriceToday()), String.valueOf(supplier.getQuantity()), supplier.getDescription(), String.valueOf(supplier.getTotal()) };
+                    modelTableSupplies.addRow(item);
+                    this.clear2();
+                } else this.vWelcome.error();
+            } else this.vWelcome.error();
+        }
+        if(e.getSource() == this.vWelcome.limpiarButton1) {
+            this.clear2();
+        }
+        if(e.getSource() == this.vWelcome.guardarButton1) {
+            if(selectedAvailableSupply != null) {
+                Model.AvailableSupply newSupplier = new Model.AvailableSupply();
+                int select3 = this.vWelcome.table2.getSelectedRow();
+                newSupplier.setProduct(modelTableSupplies.getValueAt(select3, 0).toString());
+                newSupplier.setSupply(modelTableSupplies.getValueAt(select3, 1).toString());
+                newSupplier.setSupplier(modelTableSupplies.getValueAt(select3, 2).toString());
+                try {
+                    newSupplier.setPriceToday(Double.parseDouble(modelTableSupplies.getValueAt(select3, 3).toString()));
+                    newSupplier.setQuantity(Integer.parseInt(modelTableSupplies.getValueAt(select3, 4).toString()));
+                    newSupplier.setTotal(Integer.parseInt(modelTableSupplies.getValueAt(select3, 6).toString()));
+                } catch(Exception ex) {
+                    ex.printStackTrace();
+                    this.vWelcome.error();
+                }
+                newSupplier.setDescription(modelTableSupplies.getValueAt(select3, 5).toString());
+                if(this.mWelcomeDB.updateAvailableSupplier(selectedAvailableSupply, newSupplier)) {
+                    this.vWelcome.exito();
+                } else this.vWelcome.error();
+            }
+        }
+        if(e.getSource() == this.vWelcome.eliminarButton1) {
+            modelTableSupplies = (DefaultTableModel) this.vWelcome.table2.getModel();
+            if(this.mWelcomeDB.deleteAvailableSupplier(selectedAvailableSupply)) {
+                this.vWelcome.exito();
+                modelTableSupplies.removeRow(selectRowTableSupplies);
+            } else this.vWelcome.error();
         }
     }
 
     public boolean error(String check) {
         switch(check) {
             case "":
+            case "Seleccione":
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    public boolean error2(String check) {
+        switch(check) {
+            case "":
+            case "0":
             case "Seleccione":
                 return false;
             default:
@@ -218,6 +375,14 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
         this.vWelcome.textArea2.setText(null);
     }
 
+    public void clear2() {
+        this.vWelcome.productsList.setSelectedIndex(0);
+        this.vWelcome.priceSpinner.setValue(0);
+        this.vWelcome.quantitySpinner.setValue(0);
+        this.vWelcome.textArea1.setText(null);
+        this.vWelcome.totalSpinner.setValue(0);
+    }
+
     public void resetSuppliesTab() {
         this.vWelcome.suppliesList.removeAllItems();
         this.vWelcome.supplierList.removeAllItems();
@@ -228,7 +393,12 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        selectRowTableSupplier = this.vWelcome.table3.getSelectedRow();
+        if(e.getSource() == this.vWelcome.table3) {
+            selectRowTableSupplier = this.vWelcome.table3.getSelectedRow();
+        }
+        if(e.getSource() == this.vWelcome.table2) {
+            selectRowTableSupplies = this.vWelcome.table2.getSelectedRow();
+        }
     }
 
     @Override
@@ -243,6 +413,21 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                 selectedSupplier.setDescription(model.getValueAt(select, 3).toString());
             }
         }
+        if(e.getSource() == this.vWelcome.table2) {
+            int select = this.vWelcome.table2.getSelectedRow();
+            if(selectRowTableSupplies != select) {
+                selectedAvailableSupply = new Model.AvailableSupply();
+                selectedAvailableSupply.setProduct(modelTableSupplies.getValueAt(select, 0).toString());
+                selectedAvailableSupply.setSupply(modelTableSupplies.getValueAt(select, 1).toString());
+                selectedAvailableSupply.setSupplier(modelTableSupplies.getValueAt(select, 2).toString());
+                selectedAvailableSupply.setPriceToday(Double.parseDouble(modelTableSupplies.getValueAt(select, 3).toString()));
+                selectedAvailableSupply.setQuantity(Integer.parseInt(modelTableSupplies.getValueAt(select, 4).toString()));
+                selectedAvailableSupply.setDescription(modelTableSupplies.getValueAt(select, 5).toString());
+                selectedAvailableSupply.setTotal(Integer.parseInt(modelTableSupplies.getValueAt(select, 6).toString()));
+
+                System.out.println(selectedAvailableSupply);
+            }
+        }
     }
 
     public void newSupplier() {
@@ -253,6 +438,20 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
             selectedSupplier.setSupply(model.getValueAt(0, 1).toString());
             selectedSupplier.setPrice(Double.parseDouble(model.getValueAt(0, 2).toString()));
             selectedSupplier.setDescription(model.getValueAt(0, 3).toString());
+        }
+    }
+
+    public void newAvailableSupplier() {
+        selectRowTableSupplies = 9999;
+        if(modelTableSupplies.getRowCount() != 0) {
+            selectedAvailableSupply = new Model.AvailableSupply();
+            selectedAvailableSupply.setProduct(modelTableSupplies.getValueAt(0, 0).toString());
+            selectedAvailableSupply.setSupply(modelTableSupplies.getValueAt(0, 1).toString());
+            selectedAvailableSupply.setSupplier(modelTableSupplies.getValueAt(0, 2).toString());
+            selectedAvailableSupply.setPriceToday(Double.parseDouble(modelTableSupplies.getValueAt(0, 3).toString()));
+            selectedAvailableSupply.setQuantity(Integer.parseInt(modelTableSupplies.getValueAt(0, 4).toString()));
+            selectedAvailableSupply.setDescription(modelTableSupplies.getValueAt(0, 5).toString());
+            selectedAvailableSupply.setTotal(Integer.parseInt(modelTableSupplies.getValueAt(0, 6).toString()));
         }
     }
 

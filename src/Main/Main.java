@@ -14,12 +14,6 @@ public class Main {
         Controller.Login cProduct = new Controller.Login(mLogin, mLoginDB, vLogin);
         cProduct.start();
         vLogin.setVisible(true);
-        
-        /*String lines = "Arroz, Azucar, Ensalada";
-        List<String> elephantList = Arrays.asList(lines.split(","));
-        for(String el: elephantList) {
-            System.out.println(el.trim());
-        }*/
 
         /*View.ChatServer vChatServer = new View.ChatServer();
 
