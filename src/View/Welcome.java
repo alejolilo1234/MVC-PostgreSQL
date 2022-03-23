@@ -48,11 +48,11 @@ public class Welcome extends JFrame {
         }
     }
 
-    public void error() {
-        JOptionPane.showMessageDialog(null, "Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
+    public void error(String message) {
+        JOptionPane.showMessageDialog(null, message);
     }
 
-    public void exito() {
-        JOptionPane.showMessageDialog(null, "Datos insertados correctamente!");
+    public void success(String message) {
+        JOptionPane.showMessageDialog(null, message);
     }
 }

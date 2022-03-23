@@ -1,6 +1,5 @@
 package Controller;
 
-import Model.AvailableSupply;
 import Model.Supplier;
 
 import javax.swing.*;
@@ -12,7 +11,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Welcome implements ActionListener, MouseListener, ChangeListener {
@@ -155,28 +153,28 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                 }
                 switch((String) this.vWelcome.comboBox1.getSelectedItem()) {
                     case "Papas rellenas":
-                        if(!harina.isEmpty() && !carne.isEmpty() && !papa.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
-                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                        if(!harina.isEmpty() && !carne.isEmpty() && !papa.isEmpty()) this.vWelcome.success("Exito!!");
+                        else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Pasteles de carne":
-                        if(!harina.isEmpty() && !carne.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
-                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                        if(!harina.isEmpty() && !carne.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Pasteles de pollo":
-                        if(!harina.isEmpty() && !pollo.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
-                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                        if(!harina.isEmpty() && !pollo.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Churros/Dedos":
-                        if(!harina.isEmpty() && !queso.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
-                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                        if(!harina.isEmpty() && !queso.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Hojaldras":
-                        if(!harina.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
-                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                        if(!harina.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Empanadas":
-                        if(!harina.isEmpty() && !papa.isEmpty() && !aceite.isEmpty()) JOptionPane.showMessageDialog(null, "Exito");
-                        else JOptionPane.showMessageDialog(null, "No se pudo crear el producto");
+                        if(!harina.isEmpty() && !papa.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     default:
                         System.out.println("Error");
@@ -221,7 +219,7 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                         this.vWelcome.suppliesList.addItem(pl.trim());
                 break;
                 default:
-                    this.vWelcome.error();
+                    this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
                 break;
             }
         }
@@ -251,13 +249,13 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                     this.error(this.vWelcome.textField5.getText())
             ) {
                 if(this.mWelcomeDB.insertSupplier(supplier)){
-                    this.vWelcome.exito();
+                    this.vWelcome.success("Datos insertados correctamente!");
                     model = (DefaultTableModel) this.vWelcome.table3.getModel();
                     String[] item = { supplier.getName(), supplier.getSupply(), String.valueOf(supplier.getPrice()), supplier.getDescription() };
                     model.addRow(item);
                     this.clear();
-                } else this.vWelcome.error();
-            } else this.vWelcome.error();
+                } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
+            } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
         }
         if(e.getSource() == this.vWelcome.limpiarButton) {
             this.clear();
@@ -272,20 +270,20 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                     newSupplier.setPrice(Double.parseDouble(model.getValueAt(select2, 2).toString()));
                 } catch(Exception ex) {
                     ex.printStackTrace();
-                    this.vWelcome.error();
+                    this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
                 }
                 newSupplier.setDescription(model.getValueAt(select2, 3).toString());
                 if(this.mWelcomeDB.updateSupplier(selectedSupplier, newSupplier)) {
-                    this.vWelcome.exito();
-                } else this.vWelcome.error();
+                    this.vWelcome.success("Datos insertados correctamente!");
+                } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
             }
         }
         if(e.getSource() == this.vWelcome.eliminarButton) {
             model = (DefaultTableModel) this.vWelcome.table3.getModel();
             if(this.mWelcomeDB.deleteSupplier(selectedSupplier)) {
-                this.vWelcome.exito();
+                this.vWelcome.success("Datos insertados correctamente!");
                 model.removeRow(selectRowTableSupplier);
-            } else this.vWelcome.error();
+            } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
         }
         // AvailableSupplies
         if(e.getSource() == this.vWelcome.agregarButton1) {
@@ -306,13 +304,13 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                     this.error2(this.vWelcome.textArea1.getText())
             ) {
                 if(this.mWelcomeDB.insertAvailableSupply(supplier)){
-                    this.vWelcome.exito();
+                    this.vWelcome.success("Datos insertados correctamente!");
                     modelTableSupplies = (DefaultTableModel) this.vWelcome.table2.getModel();
                     String[] item = { supplier.getProduct(), supplier.getSupply(), supplier.getSupplier(), String.valueOf(supplier.getPriceToday()), String.valueOf(supplier.getQuantity()), supplier.getDescription(), String.valueOf(supplier.getTotal()) };
                     modelTableSupplies.addRow(item);
                     this.clear2();
-                } else this.vWelcome.error();
-            } else this.vWelcome.error();
+                } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
+            } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
         }
         if(e.getSource() == this.vWelcome.limpiarButton1) {
             this.clear2();
@@ -330,20 +328,20 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                     newSupplier.setTotal(Integer.parseInt(modelTableSupplies.getValueAt(select3, 6).toString()));
                 } catch(Exception ex) {
                     ex.printStackTrace();
-                    this.vWelcome.error();
+                    this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
                 }
                 newSupplier.setDescription(modelTableSupplies.getValueAt(select3, 5).toString());
                 if(this.mWelcomeDB.updateAvailableSupplier(selectedAvailableSupply, newSupplier)) {
-                    this.vWelcome.exito();
-                } else this.vWelcome.error();
+                    this.vWelcome.success("Datos insertados correctamente!");
+                } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
             }
         }
         if(e.getSource() == this.vWelcome.eliminarButton1) {
             modelTableSupplies = (DefaultTableModel) this.vWelcome.table2.getModel();
             if(this.mWelcomeDB.deleteAvailableSupplier(selectedAvailableSupply)) {
-                this.vWelcome.exito();
+                this.vWelcome.success("Datos insertados correctamente!");
                 modelTableSupplies.removeRow(selectRowTableSupplies);
-            } else this.vWelcome.error();
+            } else this.vWelcome.error("Hubo un error, por favor intentalo de nuevo.\nRevisa que ningún campo este vacío o con un dato incorrecto.");
         }
     }
 
