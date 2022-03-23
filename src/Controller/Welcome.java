@@ -45,6 +45,8 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
         this.vWelcome.table3.addMouseListener(this);
         // Product
         this.vWelcome.btnSave.addActionListener(this);
+        this.vWelcome.limpiarButton2.addActionListener(this);
+        this.vWelcome.btnDelete.addActionListener(this);
         // Supplies
         this.vWelcome.productsList.addActionListener(this);
         this.vWelcome.supplierList.addActionListener(this);
@@ -115,6 +117,17 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         // Products
+        if(e.getSource() == this.vWelcome.limpiarButton2) {
+            this.vWelcome.comboBox1.setSelectedIndex(0);
+            this.vWelcome.textField1.setValue(0);
+        }
+        if(e.getSource() == this.vWelcome.btnDelete) {
+            String[] tableHeader = { "Nombre", "Cantidad" };
+            model2 = new DefaultTableModel(tableHeader, 0);
+            this.vWelcome.table1.setModel(model2);
+            this.mWelcomeDB.sellProducts();
+            this.vWelcome.success("Productos vendidos");
+        }
         if(e.getSource() == this.vWelcome.btnSave) {
             List<Model.AvailableSupply> list = mWelcomeDB.createProduct((String) this.vWelcome.comboBox1.getSelectedItem());
 
@@ -147,40 +160,136 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                             queso.add(true);
                             break;
                         default:
-                            System.out.println("Error");
+                            this.vWelcome.error("Error");
                         break;
                     }
                 }
                 switch((String) this.vWelcome.comboBox1.getSelectedItem()) {
                     case "Papas rellenas":
-                        if(!harina.isEmpty() && !carne.isEmpty() && !papa.isEmpty()) this.vWelcome.success("Exito!!");
+                        if(!harina.isEmpty() && !carne.isEmpty() && !papa.isEmpty()){
+                            if(
+                                    this.error2(String.valueOf(this.vWelcome.comboBox1.getSelectedItem())) &&
+                                            this.error2(String.valueOf(this.vWelcome.textField1.getValue()))
+                            ) {
+                                String name = String.valueOf(this.vWelcome.comboBox1.getSelectedItem());
+                                int quantity = Integer.parseInt(String.valueOf(this.vWelcome.textField1.getValue()));
+                                if(this.mWelcomeDB.insertProductReady(name, quantity)){
+                                    this.vWelcome.success("Datos insertados correctamente!");
+                                    model2 = (DefaultTableModel) this.vWelcome.table1.getModel();
+                                    String[] item = { String.valueOf(this.vWelcome.comboBox1.getSelectedItem()), String.valueOf(this.vWelcome.textField1.getValue()) };
+                                    model2.addRow(item);
+                                    this.vWelcome.comboBox1.setSelectedIndex(0);
+                                    this.vWelcome.textField1.setValue(0);
+                                } else this.vWelcome.error("Hubo un error.");
+                            } else this.vWelcome.error("No se pudo crear el producto.");
+                        }
                         else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Pasteles de carne":
-                        if(!harina.isEmpty() && !carne.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        if(!harina.isEmpty() && !carne.isEmpty() && !aceite.isEmpty()) {
+                            if(
+                                    this.error2(String.valueOf(this.vWelcome.comboBox1.getSelectedItem())) &&
+                                            this.error2(String.valueOf(this.vWelcome.textField1.getValue()))
+                            ) {
+                                String name = String.valueOf(this.vWelcome.comboBox1.getSelectedItem());
+                                int quantity = Integer.parseInt(String.valueOf(this.vWelcome.textField1.getValue()));
+                                if(this.mWelcomeDB.insertProductReady(name, quantity)){
+                                    this.vWelcome.success("Datos insertados correctamente!");
+                                    model2 = (DefaultTableModel) this.vWelcome.table1.getModel();
+                                    String[] item = { String.valueOf(this.vWelcome.comboBox1.getSelectedItem()), String.valueOf(this.vWelcome.textField1.getValue()) };
+                                    model2.addRow(item);
+                                    this.vWelcome.comboBox1.setSelectedIndex(0);
+                                    this.vWelcome.textField1.setValue(0);
+                                } else this.vWelcome.error("Hubo un error.");
+                            } else this.vWelcome.error("No se pudo crear el producto.");
+                        }
                         else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Pasteles de pollo":
-                        if(!harina.isEmpty() && !pollo.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        if(!harina.isEmpty() && !pollo.isEmpty() && !aceite.isEmpty()) {
+                            if(
+                                    this.error2(String.valueOf(this.vWelcome.comboBox1.getSelectedItem())) &&
+                                            this.error2(String.valueOf(this.vWelcome.textField1.getValue()))
+                            ) {
+                                String name = String.valueOf(this.vWelcome.comboBox1.getSelectedItem());
+                                int quantity = Integer.parseInt(String.valueOf(this.vWelcome.textField1.getValue()));
+                                if(this.mWelcomeDB.insertProductReady(name, quantity)){
+                                    this.vWelcome.success("Datos insertados correctamente!");
+                                    model2 = (DefaultTableModel) this.vWelcome.table1.getModel();
+                                    String[] item = { String.valueOf(this.vWelcome.comboBox1.getSelectedItem()), String.valueOf(this.vWelcome.textField1.getValue()) };
+                                    model2.addRow(item);
+                                    this.vWelcome.comboBox1.setSelectedIndex(0);
+                                    this.vWelcome.textField1.setValue(0);
+                                } else this.vWelcome.error("Hubo un error.");
+                            } else this.vWelcome.error("No se pudo crear el producto.");
+                        }
                         else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Churros/Dedos":
-                        if(!harina.isEmpty() && !queso.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        if(!harina.isEmpty() && !queso.isEmpty() && !aceite.isEmpty()) {
+                            if(
+                                    this.error2(String.valueOf(this.vWelcome.comboBox1.getSelectedItem())) &&
+                                            this.error2(String.valueOf(this.vWelcome.textField1.getValue()))
+                            ) {
+                                String name = String.valueOf(this.vWelcome.comboBox1.getSelectedItem());
+                                int quantity = Integer.parseInt(String.valueOf(this.vWelcome.textField1.getValue()));
+                                if(this.mWelcomeDB.insertProductReady(name, quantity)){
+                                    this.vWelcome.success("Datos insertados correctamente!");
+                                    model2 = (DefaultTableModel) this.vWelcome.table1.getModel();
+                                    String[] item = { String.valueOf(this.vWelcome.comboBox1.getSelectedItem()), String.valueOf(this.vWelcome.textField1.getValue()) };
+                                    model2.addRow(item);
+                                    this.vWelcome.comboBox1.setSelectedIndex(0);
+                                    this.vWelcome.textField1.setValue(0);
+                                } else this.vWelcome.error("Hubo un error.");
+                            } else this.vWelcome.error("No se pudo crear el producto.");
+                        }
                         else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Hojaldras":
-                        if(!harina.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
+                        if(!harina.isEmpty() && !aceite.isEmpty()) {
+                            if(
+                                    this.error2(String.valueOf(this.vWelcome.comboBox1.getSelectedItem())) &&
+                                            this.error2(String.valueOf(this.vWelcome.textField1.getValue()))
+                            ) {
+                                String name = String.valueOf(this.vWelcome.comboBox1.getSelectedItem());
+                                int quantity = Integer.parseInt(String.valueOf(this.vWelcome.textField1.getValue()));
+                                if(this.mWelcomeDB.insertProductReady(name, quantity)){
+                                    this.vWelcome.success("Datos insertados correctamente!");
+                                    model2 = (DefaultTableModel) this.vWelcome.table1.getModel();
+                                    String[] item = { String.valueOf(this.vWelcome.comboBox1.getSelectedItem()), String.valueOf(this.vWelcome.textField1.getValue()) };
+                                    model2.addRow(item);
+                                    this.vWelcome.comboBox1.setSelectedIndex(0);
+                                    this.vWelcome.textField1.setValue(0);
+                                } else this.vWelcome.error("Hubo un error.");
+                            } else this.vWelcome.error("No se pudo crear el producto.");
+                        }
                         else this.vWelcome.error("No se pudo crear el producto");
                     break;
                     case "Empanadas":
-                        if(!harina.isEmpty() && !papa.isEmpty() && !aceite.isEmpty()) this.vWelcome.success("Exito!!");
-                        else this.vWelcome.error("No se pudo crear el producto");
+                        if(!harina.isEmpty() && !papa.isEmpty() && !aceite.isEmpty()) {
+                            if(
+                                    this.error2(String.valueOf(this.vWelcome.comboBox1.getSelectedItem())) &&
+                                    this.error2(String.valueOf(this.vWelcome.textField1.getValue()))
+                            ) {
+                                String name = String.valueOf(this.vWelcome.comboBox1.getSelectedItem());
+                                int quantity = Integer.parseInt(String.valueOf(this.vWelcome.textField1.getValue()));
+                                if(this.mWelcomeDB.insertProductReady(name, quantity)){
+                                    this.vWelcome.success("Datos insertados correctamente!");
+                                    model2 = (DefaultTableModel) this.vWelcome.table1.getModel();
+                                    String[] item = { String.valueOf(this.vWelcome.comboBox1.getSelectedItem()), String.valueOf(this.vWelcome.textField1.getValue()) };
+                                    model2.addRow(item);
+                                    this.vWelcome.comboBox1.setSelectedIndex(0);
+                                    this.vWelcome.textField1.setValue(0);
+                                } else this.vWelcome.error("Hubo un error.");
+                            } else this.vWelcome.error("No se pudo crear el producto.");
+                        }
+                        else this.vWelcome.error("No se pudo crear el producto.");
                     break;
                     default:
-                        System.out.println("Error");
+                        this.vWelcome.error("Error");
                     break;
                 }
-            } else System.out.println("No existen materias primas para este producto.");
+            } else this.vWelcome.error("No existen materias primas para este producto.");
         }
         if(e.getSource() == this.vWelcome.productsList) {
             String selected = (String) vWelcome.productsList.getSelectedItem();
@@ -422,8 +531,6 @@ public class Welcome implements ActionListener, MouseListener, ChangeListener {
                 selectedAvailableSupply.setQuantity(Integer.parseInt(modelTableSupplies.getValueAt(select, 4).toString()));
                 selectedAvailableSupply.setDescription(modelTableSupplies.getValueAt(select, 5).toString());
                 selectedAvailableSupply.setTotal(Integer.parseInt(modelTableSupplies.getValueAt(select, 6).toString()));
-
-                System.out.println(selectedAvailableSupply);
             }
         }
     }

@@ -9,6 +9,51 @@ import java.util.List;
 public class WelcomeDB extends Model.Connection {
 
     /* Products */
+    public boolean insertProductReady(String _name, int _quantity) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        java.sql.Connection con = (java.sql.Connection) this.getConnection();
+
+        String sql = "INSERT INTO products_ready VALUES(?, ?)";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1, _name);
+            ps.setInt(2, _quantity);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return false;
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public void sellProducts() {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        java.sql.Connection con = (java.sql.Connection) this.getConnection();
+
+        String sql = "TRUNCATE TABLE products_ready;";
+
+        try {
+            ps = con.prepareStatement(sql);
+            ps.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 
     public String readProducts() {
         PreparedStatement ps = null;
